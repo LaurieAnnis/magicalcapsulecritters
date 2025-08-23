@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | spacedolphin's Unity Experience</title>
+    <title>Unity Web Player | spacedolphin's Unreality3D Experience</title>
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, shrink-to-fit=no">
 
@@ -192,7 +192,6 @@
         }
 
         const environment = detectEnvironment();
-        environment.creatorPayPalEmail = 'laurie@unreality3d.com';
         let unityInstance = null;
 
         // PayPal integration placeholder - will be overridden by injected bridge
@@ -362,14 +361,14 @@
             }
 
             var buildUrl = "Build";
-            var loaderUrl = buildUrl + "/ff6a108b91d0257705aeda4f242a3490.loader.js?v=1754636218606";
+            var loaderUrl = buildUrl + "/ada22533b9ce24bb1164d12f587e4362.loader.js?v=1755907653085";
             var config = {
-                dataUrl: buildUrl + "/2f2226a198e2e0065d27be9bc15c9631.data?v=1754636218606",
-                frameworkUrl: buildUrl + "/77161e56f6f501b78a5ffe994ec5a338.framework.js?v=1754636218606",
-                codeUrl: buildUrl + "/3dfe9ac57f3eb4598fc8031b1a07f5da.wasm?v=1754636218606",
+                dataUrl: buildUrl + "/33eb999c1a419aaa806c24839ab578a9.data?v=1755907653085",
+                frameworkUrl: buildUrl + "/70803c84a16d3d1cfd3e9724bab9df89.framework.js?v=1755907653085",
+                codeUrl: buildUrl + "/c13174372cf99506cf0e80101adeefb4.wasm?v=1755907653085",
                 streamingAssetsUrl: "StreamingAssets",
                 companyName: "spacedolphin",
-                productName: "spacedolphin's Unity Experience",
+                productName: "spacedolphin's Unreality3D Experience",
                 productVersion: "1.0.0",
                 showBanner: unityShowBanner,
                 cacheControl: function (url) {
@@ -399,7 +398,7 @@
                 canvas.style.height = "100vh";
             }
 
-            loadingBar.style.display = "block";
+            loadingBar.style.display = "none";
 
             var script = document.createElement("script");
             script.src = loaderUrl;
