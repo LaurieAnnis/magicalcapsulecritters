@@ -2,7 +2,7 @@
 
 **Unity 6 WebGL Experience by spacedolphin**
 
-🎮 **[Play Experience](https://spacedolphin.unreality3d.com/magicalcapsulecritters/)**
+🎮 **[Play Experience](https://unreality3d.com/spacedolphin/magicalcapsulecritters/)**
 
 ---
 
