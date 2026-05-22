@@ -526,11 +526,11 @@
             }
 
             var buildUrl = "Build";
-            var loaderUrl = buildUrl + "/b7d303516131c7763e1063a5327f6008.loader.js?v=1779081221527";
+            var loaderUrl = buildUrl + "/8a4581386a6c5cda1afe6acc01b0bac9.loader.js?v=1779425771251";
             var config = {
-                dataUrl: buildUrl + "/8706c916d49aa75911f4029c45c46c0b.data?v=1779081221527",
-                frameworkUrl: buildUrl + "/89c21a26909ee6ec5a629b554e0d56ae.framework.js?v=1779081221527",
-                codeUrl: buildUrl + "/685126ec533d3eb96681a26127523a00.wasm?v=1779081221527",
+                dataUrl: buildUrl + "/dcbc57369e52d26e6c5985e79837bc36.data?v=1779425771251",
+                frameworkUrl: buildUrl + "/d527bae8644c112eda3dd796ff125500.framework.js?v=1779425771251",
+                codeUrl: buildUrl + "/0206b5a2fa546eb27980671a04210cab.wasm?v=1779425771251",
                 streamingAssetsUrl: "StreamingAssets",
                 companyName: "spacedolphin",
                 productName: "Spacedolphin's Magicalcapsulecritters",
@@ -559,6 +559,12 @@
                     if (progress === 0.5) gtag('event', 'unity_load_50_percent', { creator_name: environment.creatorUsername || 'platform', project_name: environment.projectName || 'main' });
                 }).then((instance) => {
                     unityInstance = instance;
+                    // Expose to window so external scripts (.jslib SendMessage paths,
+                    // server-injected paypal-bridge.js, profile-bridge.js) can call
+                    // SendMessage. The local 'unityInstance' var continues to serve
+                    // in-template references; window.unityInstance is the cross-script
+                    // handoff point.
+                    window.unityInstance = instance;
                     hideLoadingScreen();
                     if (window._pendingPhotonToken) {
                         unityInstance.SendMessage('U3D_FirebaseIntegration', 'OnPhotonTokenReceived', window._pendingPhotonToken);
