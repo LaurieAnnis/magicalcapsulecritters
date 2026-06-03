@@ -155,7 +155,6 @@
  
         /* ── Unity Canvas ────────────────────────────── */
         #unity-container { position: fixed; inset: 0; background: #0f172a; }
-        /* ++ FILL: 100% of the inset:0 container, not 100vh (iOS shorts vh in portrait) */
         #unity-canvas { display: block; width: 100%; height: 100%; background: #0f172a; cursor: default; }
         #unity-warning {
             position: fixed; top: 0; left: 50%; transform: translateX(-50%);
@@ -435,16 +434,12 @@
         var _isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         var _isIOSDevice = /iPhone|iPad|iPod/i.test(navigator.userAgent);
  
-        // Render density. Phones report 2x–3x; cap mobile at 2x so the GPU isn't
+        // Render density. Phones report 2x–3x; cap mobile at 1.5x so the GPU isn't
         // rendering a heavy 3D scene at full 3x (perf + crash risk) while still
         // being far sharper than the old hard 1x. Desktop uses its real density.
-        var _renderDpr = _isMobileDevice ? Math.min(window.devicePixelRatio || 1, 2) : (window.devicePixelRatio || 1);
+        var _renderDpr = _isMobileDevice ? Math.min(window.devicePixelRatio || 1, 1.5) : (window.devicePixelRatio || 1);
  
-        // ++ FILL: size the draw buffer from the canvas's ACTUAL on-screen size ×
-        // density. clientWidth/Height reflect the canvas filling its full-screen
-        // inset:0 container, so this is correct even where iOS reports a short
-        // window.innerHeight in portrait standalone (the old innerHeight sizing
-        // left a navy bar at the bottom and would squish the view).
+        // Size the draw buffer from the canvas's actual on-screen size × density.
         function resizeCanvas() {
             var c = document.querySelector('#unity-canvas');
             if (!c) return;
@@ -593,15 +588,15 @@
                 // because Add to Home Screen is an iOS system action. No "Safari only"
                 // claim. The "View More" hint covers browsers that bury the action.
                 steps = [
-                    'Tap the Share button ' + shareIcon + ' — it’s in the toolbar, or on newer iPhones tap the ' + menuIcon + ' menu by the address bar first, then Share.',
-                    'In the list that opens, tap “Add to Home Screen”. If you don’t see it, scroll down or tap “View More”.',
-                    'Tap “Add”, then open it from the new icon to play full screen.'
+                    'Tap the Share button ' + shareIcon + ' \u2014 it\u2019s in the toolbar, or on newer iPhones tap the ' + menuIcon + ' menu by the address bar first, then Share.',
+                    'In the list that opens, tap \u201CAdd to Home Screen\u201D. If you don\u2019t see it, scroll down or tap \u201CView More\u201D.',
+                    'Tap \u201CAdd\u201D, then open it from the new icon to play full screen.'
                 ];
             } else {
                 // Android Chrome and other Chromium browsers.
                 steps = [
                     'Tap the ' + menuIcon + ' menu in the corner of the browser.',
-                    'Tap “Install app”, or “Add to Home screen” if that’s what you see.',
+                    'Tap \u201CInstall app\u201D, or \u201CAdd to Home screen\u201D if that\u2019s what you see.',
                     'Confirm, then open it from the new icon to play full screen.'
                 ];
             }
@@ -728,11 +723,11 @@
             }
  
             var buildUrl = "Build";
-            var loaderUrl = buildUrl + "/0e821937f7858390c56ae04ec14dcbe7.loader.js?v=1780328516029";
+            var loaderUrl = buildUrl + "/0e821937f7858390c56ae04ec14dcbe7.loader.js?v=1780510732354";
             var config = {
-                dataUrl: buildUrl + "/6201875eba0dcb7cf925fa72284a26d2.data?v=1780328516029",
-                frameworkUrl: buildUrl + "/1e25922a9a32d7cdb44d1b88dc290f73.framework.js?v=1780328516029",
-                codeUrl: buildUrl + "/f39341839a920eaf4dbb5282a6784d17.wasm?v=1780328516029",
+                dataUrl: buildUrl + "/d7f07dd811decd8805be3290dc96f5a4.data?v=1780510732354",
+                frameworkUrl: buildUrl + "/1e25922a9a32d7cdb44d1b88dc290f73.framework.js?v=1780510732354",
+                codeUrl: buildUrl + "/f39341839a920eaf4dbb5282a6784d17.wasm?v=1780510732354",
                 streamingAssetsUrl: "StreamingAssets",
                 companyName: "spacedolphin",
                 productName: "Spacedolphin's Magicalcapsulecritters",
@@ -745,9 +740,11 @@
                 }
             };
  
-            // ++ FILL: canvas fills its inset:0 container (100%), not 100vw/100vh.
-            canvas.style.width = "100%"; canvas.style.height = "100%";
-            config.devicePixelRatio = _renderDpr;   // capped-2x on mobile, real density on desktop
+            // Canvas fills the viewport. 100vh/100vw (NOT 100%) — 100% breaks
+            // viewport-fit=cover on iOS standalone, leaving a bottom gap; 100vh is
+            // the value that resolves correctly in standalone PWA mode.
+            canvas.style.width = "100vw"; canvas.style.height = "100vh";
+            config.devicePixelRatio = _renderDpr;   // capped-1.5x on mobile, real density on desktop
  
             var script = document.createElement("script");
             script.src = loaderUrl;
@@ -780,7 +777,7 @@
                         unityInstance.SendMessage('U3D_FirebaseIntegration', 'OnPhotonTokenReceived', window._pendingPhotonToken);
                         window._pendingPhotonRoom = null; window._pendingPhotonContent = null; window._pendingPhotonToken = null;
                     }
-                    resizeCanvas();           // ++ FILL: match the draw buffer to the real on-screen size at load
+                    resizeCanvas();
                     checkVRSupport();
                     showFullscreenButton();   // PWA: reveal the mobile Full Screen button after load
                     gtag('event', 'unity_load_complete', { creator_name: environment.creatorUsername || 'platform', project_name: environment.projectName || 'main', load_time_ms: Date.now() - performance.timing.navigationStart });
@@ -797,7 +794,7 @@
             window.addEventListener(evt, function () {
                 if (!unityInstance) return;
                 resizeCanvas();
-                // ++ FILL: iOS reports stale dimensions immediately after a turn;
+                // iOS reports stale dimensions immediately after a turn;
                 // re-apply once the new orientation settles.
                 setTimeout(function () { if (unityInstance) resizeCanvas(); }, 300);
             });
